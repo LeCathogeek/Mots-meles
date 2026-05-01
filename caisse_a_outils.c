@@ -21,14 +21,18 @@ int controle_d_acquisition() {
 
 void jeu() {
     printf("\033[2J\033[H");
-    parametres();
+    int dimensions[2] = {8, 8};
+    Boolean diagonale = false;
+    int time;
+    parametres(dimensions, &diagonale, &time);
 }
 
-void parametres() {
+void parametres(int* dimensions, Boolean* diagonale, int* time) {
     printf("\033[2J\033[H");
     printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\n");
-    int dimensions[2] = {8, 8};
     get_dimensions(dimensions);
+    get_diagonale(diagonale);
+    get_time(time);
 }
 
 void get_dimensions(int* dimensions) {
@@ -53,7 +57,29 @@ void get_dimensions(int* dimensions) {
     printf("Les dimensions de la grille ont bien ete configurees !\nVotre grille fait %dx%d cases.\n", dimensions[0], dimensions[1]);
 }
 
+void get_diagonale(Boolean* diagonale) {
+  char tmp[10];
+  int choice = 2;
+  do {
+    printf("Voulez-vous jouer avec la regle des diagonales ? Tapez 0 pour non et 1 pour oui.\n");
+      fgets(tmp, sizeof(tmp), stdin);
+      sscanf(tmp, "%d", &choice);
+      if (choice != 0 && choice != 1) {
+          printf("Voulez-vous jouer avec la regle des diagonales ? Tapez 0 pour non et 1 pour oui.\n");
+      }
+  } while (choice != 0 && choice != 1);
+  *diagonale = choice;
+    if (*diagonale == true) {
+        printf("Vous avez choisi la regle des diagonales.");
+    }
+    else {
+        printf("Vous avez refuse de jouer avec des mots en diagonale.");
+    }
+}
 
+void get_time(int* time) {
+
+}
 
 void scores() {
     printf("\033[2J\033[H");
