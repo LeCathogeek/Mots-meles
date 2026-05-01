@@ -25,11 +25,14 @@ void jeu() {
     Boolean diagonale = false;
     int time;
     parametres(dimensions, &diagonale, &time);
+    char** grille = generation_grille(dimensions, diagonale);
 }
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
     printf("\033[2J\033[H");
+    char nul;
     printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\n");
+    scanf("%c", &nul);
     get_dimensions(dimensions);
     get_diagonale(diagonale);
     get_time(time);
@@ -38,6 +41,7 @@ void parametres(int* dimensions, Boolean* diagonale, int* time) {
 void get_dimensions(int* dimensions) {
     int tmp = 8;
     char dim[10] = "25";
+    printf("\033[2J\033[H");
     for (int i = 1; i < 3; i++) {
         do {
             printf("Veuillez entrer la valeur de la dimension %d. (Un nombre entier situe entre 8 et 16)\n", i);
@@ -58,6 +62,7 @@ void get_dimensions(int* dimensions) {
 }
 
 void get_diagonale(Boolean* diagonale) {
+  printf("\033[2J\033[H");
   char tmp[10];
   int choice = 2;
   do {
@@ -65,20 +70,53 @@ void get_diagonale(Boolean* diagonale) {
       fgets(tmp, sizeof(tmp), stdin);
       sscanf(tmp, "%d", &choice);
       if (choice != 0 && choice != 1) {
-          printf("Voulez-vous jouer avec la regle des diagonales ? Tapez 0 pour non et 1 pour oui.\n");
+          printf("Attention ! Tapez 0 pour non et 1 pour oui.\n");
       }
   } while (choice != 0 && choice != 1);
   *diagonale = choice;
     if (*diagonale == true) {
-        printf("Vous avez choisi la regle des diagonales.");
+        printf("Vous avez choisi la regle des diagonales.\n");
     }
     else {
-        printf("Vous avez refuse de jouer avec des mots en diagonale.");
+        printf("Vous avez refuse de jouer avec des mots en diagonale.\n");
     }
 }
 
 void get_time(int* time) {
+    printf("\033[2J\033[H");
+    char tmp[10];
+    int choice = 0;
+    do {
+        printf("Combien de temps voulez-vous jouer ? Entrez votre réponse en secondes (entre 60 et 180 secondes)\n");
+        fgets(tmp, sizeof(tmp), stdin);
+        sscanf(tmp, "%d", &choice);
+        if (choice < 60 || choice > 180) {
+            printf("Attention ! Entrez bien un entier compris en 60 et 180.\n");
+        }
+    } while (choice < 60 || choice > 180);
+    *time = choice;
+    printf("Vous voulez jouer %d secondes.\n", choice);
+}
 
+char** generation_grille(int* dimensions, Boolean diagonale) {
+    printf("\033[2J\033[H");
+    printf("Generation de la grille...\nPatientez...\n");
+    char ** grille = (char**) malloc(dimensions[0] * sizeof(char*));
+    for (int i = 0; i < dimensions[0]; i++) {
+        grille[i] = malloc(dimensions[1] * sizeof(char));
+    }
+
+    return grille;
+}
+
+int recherche_minimum(int* tableau, int size) {
+    int minimum = 0;
+    for (int i = 0; i < size; i++) {
+        if (tableau[minimum] < tableau[i]) {
+            minimum = i;
+        }
+    }
+    return minimum;
 }
 
 void scores() {

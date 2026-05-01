@@ -65,6 +65,24 @@ void get_diagonale(Boolean* diagonale);
 void get_time(int* time);
 
 /*
+ * Cette fonction permet de générer une grille de mots prête à l'emploi pour jouer.
+ * --------------------------------------------------------------------------------
+ * dimensions -> int *, un tableau d'entiers contenant les dimensions de la grille
+ * diagonale -> Boolean, un booléen qui nous dit si le joueur veut des mots en diagonale
+ * return -> char**, un tableau de caractères à deux dimensions.
+ */
+char** generation_grille(int* dimensions, Boolean diagonale);
+
+/*
+ * Cette fonction permet de renvoyer l'indice de la plus petite valeur d'un tableau d'entiers.
+ * -------------------------------------------------------------------------------------------
+ * tableau -> int*, un tableau d'entiers
+ * size -> int, la taille du tableau
+ * return -> int
+ */
+int recherche_minimum(int* tableau, int size);
+
+/*
  * Cette procédure permet d'afficher les meilleurs scores.
  * -------------------------------------------------------
  * return -> void
