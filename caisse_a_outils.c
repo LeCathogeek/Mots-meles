@@ -3,6 +3,15 @@
 //
 #include "caisse_a_outils.h"
 
+void ensure_save_file() {
+    FILE *file;
+    file = fopen("save.txt", "r");
+    if (file == NULL) {
+        file = fopen("save.txt", "w");
+        fputs("", file);
+        fclose(file);
+    }
+}
 
 int controle_d_acquisition() {
     char choix[10];
@@ -101,12 +110,20 @@ void get_time(int* time) {
 char** generation_grille(int* dimensions, Boolean diagonale) {
     printf("\033[2J\033[H");
     printf("Generation de la grille...\nPatientez...\n");
-    char ** grille = (char**) malloc(dimensions[0] * sizeof(char*));
+    char** grille = (char**) malloc(dimensions[0] * sizeof(char*));
     for (int i = 0; i < dimensions[0]; i++) {
         grille[i] = malloc(dimensions[1] * sizeof(char));
     }
-
     return grille;
+}
+
+SensDirection choix_sens_direction() {
+    SensDirection le_sens_direction;
+    int direction = rand() % 3;
+    le_sens_direction.direction = direction;
+    int sens = rand() % 2;
+    le_sens_direction.sens = sens;
+    return le_sens_direction;
 }
 
 int recherche_minimum(int* tableau, int size) {

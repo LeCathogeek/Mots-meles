@@ -12,6 +12,23 @@
 
 typedef enum {false=0, true=1} Boolean;
 
+typedef enum {horizontal=0, vertical=1, diagonal=2} Direction;
+
+typedef enum {endroit=0, envers=1} Sens;
+
+typedef struct {
+  Direction direction;
+  Sens sens;
+} SensDirection;
+
+/*
+ * Cette procédure permet de vérifier que les fichiers de sauvegarde existent ou non
+ * et de le créer sinon.
+ * ------------------------------------------------------------------------------------
+ * return -> void
+ */
+void ensure_save_file();
+
 /*
  * Cette fonction permet d'effectuer le contrôle d'acquisition au début du jeu
  * afin de savoir si l'utilisateur veut jouer, regarder les meilleurs scores ou quitter le jeu.
@@ -72,6 +89,14 @@ void get_time(int* time);
  * return -> char**, un tableau de caractères à deux dimensions.
  */
 char** generation_grille(int* dimensions, Boolean diagonale);
+
+/*
+ * Cette fonction permet de générer un SensDirection indiquant
+ * dans quel sens et dans quelle direction un mot sera généré.
+ * ------------------------------------------------------------
+ * return -> SensDirection
+ */
+SensDirection choix_sens_direction();
 
 /*
  * Cette fonction permet de renvoyer l'indice de la plus petite valeur d'un tableau d'entiers.
