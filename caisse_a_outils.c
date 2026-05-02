@@ -122,14 +122,39 @@ char** generation_grille(int* dimensions, Boolean diagonale) {
     }
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
     char* mot;
-    SensDirection sens_direction;
+    Boolean succes = true;
     while (nombre_de_lettres > 2) {
       mot = tirer_mot(nombre_de_lettres);
-      sens_direction = choix_sens_direction(&diagonale);
-      nombre_de_lettres--;
+      succes = placer_mot(grille, dimensions, mot, &diagonale);
+      if (succes == false) {
+          nombre_de_lettres--;
+      }
     }
     complete_grille(grille, dimensions);
     return grille;
+}
+
+Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale) {
+    SensDirection sens_direction = choix_sens_direction(diagonale);
+    int dx = 0;
+    int dy = 0;
+    if (sens_direction.direction == horizontal) {
+        dx = 1;
+    }
+    else {
+        if (sens_direction.direction == vertical) {
+            dy = 1;
+        }
+        else {
+            dx = 1;
+            dy = 1;
+        }
+    }
+    if (sens_direction.sens == envers) {
+        dx = -dx;
+        dy = -dy;
+    }
+
 }
 
 SensDirection choix_sens_direction(Boolean* diagonale_autorise) {

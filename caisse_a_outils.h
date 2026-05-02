@@ -91,6 +91,17 @@ void get_time(int* time);
 char** generation_grille(int* dimensions, Boolean diagonale);
 
 /*
+ * Cette fonction permet d'essayer de placer un mot dans la grille.
+ * ----------------------------------------------------------------
+ * grille -> char**, notre grille de mots mêlés
+ * dimensions -> int*, notre tableau donnant les dimensions de notre grille.
+ * mot -> char*, le mot que l'on essaie de placer dans la grille
+ * diagonale -> Boolean*, si on souhaite que des mots apparaissent en diagonale
+ * return -> Boolean, si la fonction a réussi à placer le mot.
+ */
+Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale);
+
+/*
  * Cette fonction permet de générer un SensDirection indiquant
  * dans quel sens et dans quelle direction un mot sera généré.
  * ------------------------------------------------------------
@@ -125,11 +136,11 @@ void complete_grille(char** grille, int* dimensions);
  */
 void affichage_grille(char** grille, int* dimensions);
 
-
 /*
- *
- *
- *
+ * Cette fonction permet de tirer au hasard un mot de la longueur désirée.
+ * -----------------------------------------------------------------------
+ * longueur -> int, la longueur du mot souhaité
+ * return -> char*, le mot souhaité
  */
 char* tirer_mot(int longueur);
 
