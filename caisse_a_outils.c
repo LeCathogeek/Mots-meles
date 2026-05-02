@@ -40,9 +40,7 @@ void jeu() {
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
     printf("\033[2J\033[H");
-    char nul;
     printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\n");
-    scanf("%c", &nul);
     get_dimensions(dimensions);
     get_diagonale(diagonale);
     get_time(time);
@@ -50,7 +48,7 @@ void parametres(int* dimensions, Boolean* diagonale, int* time) {
 
 void get_dimensions(int* dimensions) {
     int tmp = 8;
-    char dim[10] = "25";
+    char dim[10] = "";
     printf("\033[2J\033[H");
     for (int i = 1; i < 3; i++) {
         do {
