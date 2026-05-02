@@ -108,6 +108,24 @@ SensDirection choix_sens_direction();
 int recherche_minimum(int* tableau, int size);
 
 /*
+ * Cette procédure permet de remplir une grille de mots mêlés où il reste des
+ * cases qui n'ont pas pu être complétées.
+ * ----------------------------------------------------------------------------
+ * grille -> char**, un tableau de lettres à deux dimensions, la grille du jeu
+ * return -> void
+ */
+void complete_grille(char** grille, int* dimensions);
+
+/*
+ * Cette procédure permet d'afficher une grille de mots mêlés.
+ * -----------------------------------------------------------
+ * grille -> char**, le tableau à deux dimensions contenant les lettres du jeu
+ * dimensions -> int*, les dimensions de la grille
+ * return -> void
+ */
+void affichage_grille(char** grille, int* dimensions);
+
+/*
  * Cette procédure permet d'afficher les meilleurs scores.
  * -------------------------------------------------------
  * return -> void

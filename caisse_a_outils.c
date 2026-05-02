@@ -35,6 +35,7 @@ void jeu() {
     int time;
     parametres(dimensions, &diagonale, &time);
     char** grille = generation_grille(dimensions, diagonale);
+    affichage_grille(grille, dimensions);
 }
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
@@ -114,6 +115,16 @@ char** generation_grille(int* dimensions, Boolean diagonale) {
     for (int i = 0; i < dimensions[0]; i++) {
         grille[i] = malloc(dimensions[1] * sizeof(char));
     }
+    for (int i = 0; i < dimensions[0]; i++) {
+        for (int j = 0; j < dimensions[1]; j++) {
+          grille[i][j] = '@';
+        }
+    }
+    int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
+    while (nombre_de_lettres > 2) {
+      nombre_de_lettres--;
+    }
+    complete_grille(grille, dimensions);
     return grille;
 }
 
@@ -134,6 +145,35 @@ int recherche_minimum(int* tableau, int size) {
         }
     }
     return minimum;
+}
+
+void complete_grille(char** grille, int* dimensions) {
+    for (int i = 0; i < dimensions[0]; i++) {
+    for (int j = 0; j < dimensions[1]; j++) {
+      if (grille[i][j] == '@') {
+          grille[i][j] = rand() % 26 + 65;
+      }
+    }
+    }
+}
+
+void affichage_grille(char** grille, int* dimensions) {
+    for (int i = 0; i < dimensions[0]; i++) {
+        printf("_");
+    }
+    printf("\n");
+    for (int i = 0; i < dimensions[0]; i++) {
+        for (int j = 0; j < dimensions[1]; j++) {
+            printf("%c", grille[i][j]);
+        }
+            printf("\n");
+
+    }
+    printf("\n");
+    for (int i = 0; i < dimensions[0]; i++) {
+        printf("_");
+    }
+    printf("\n");
 }
 
 void scores() {
