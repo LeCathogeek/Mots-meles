@@ -125,6 +125,14 @@ void complete_grille(char** grille, int* dimensions);
  */
 void affichage_grille(char** grille, int* dimensions);
 
+
+/*
+ *
+ *
+ *
+ */
+char* tirer_mot(int longueur);
+
 /*
  * Cette procédure permet d'afficher les meilleurs scores.
  * -------------------------------------------------------

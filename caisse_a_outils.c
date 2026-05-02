@@ -140,7 +140,7 @@ SensDirection choix_sens_direction() {
 int recherche_minimum(int* tableau, int size) {
     int minimum = 0;
     for (int i = 0; i < size; i++) {
-        if (tableau[minimum] < tableau[i]) {
+        if (tableau[i] < tableau[minimum]) {
             minimum = i;
         }
     }
@@ -159,7 +159,7 @@ void complete_grille(char** grille, int* dimensions) {
 
 void affichage_grille(char** grille, int* dimensions) {
     printf(" ");
-    for (int i = 0; i < dimensions[0]; i++) {
+    for (int i = 0; i < dimensions[1]; i++) {
         printf("--- ");
     }
     printf("\n");
@@ -169,13 +169,31 @@ void affichage_grille(char** grille, int* dimensions) {
             printf(" %c |", grille[k][j]);
         }
         printf("\n");
-        printf(" ");
-        for (int i = 0; i < dimensions[0]; i++) {
-            printf("--- ");
-        }
-        printf("\n");
+    }
+    printf(" ");
+    for (int i = 0; i < dimensions[1]; i++) {
+        printf("--- ");
     }
     printf("\n");
+}
+
+
+char* tirer_mot(int longueur) {
+    char* mots_3 = {"ARA", "RAT", "TRI", "SUR"};
+    char* mots_4 = {"BANC", "TROP", "TARD", "PERD"};
+    char* mots_5 = {"CLAIR", "RATON", "ARBRE", "IDIOT"};
+    char* mots_6 = {"RENARD", "OBSCUR"};
+    char* mots_7 = {"REPTILE", "ABRICOT"};
+    char* mots_8 = {"ABDIQUAT"};
+    char* mots_9 = {"ABOIERONS"};
+    char* mots_10 = {"ABOMINABLE"};
+    char* mots_11 = {"ABIMERAIENT"};
+    char* mots_12 = {"INFORMATIQUE"};
+    char* mots_13 = {"ABRUTISSANTES"};
+    char* mots_14 = {"ACCOMPLIRAIENT"};
+    char* mots_15 = {"AFFRANCHISSABLE"};
+    char* mots_16 = {"ABASOURDISSAIENT"};
+
 }
 
 void scores() {
