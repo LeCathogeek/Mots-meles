@@ -121,18 +121,29 @@ char** generation_grille(int* dimensions, Boolean diagonale) {
         }
     }
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
+    char* mot;
+    SensDirection sens_direction;
     while (nombre_de_lettres > 2) {
+      mot = tirer_mot(nombre_de_lettres);
+      sens_direction = choix_sens_direction(&diagonale);
       nombre_de_lettres--;
     }
     complete_grille(grille, dimensions);
     return grille;
 }
 
-SensDirection choix_sens_direction() {
+SensDirection choix_sens_direction(Boolean* diagonale_autorise) {
     SensDirection le_sens_direction;
-    int direction = rand() % 3;
+    int direction;
+    int sens;
+    if (*diagonale_autorise==true) {
+        direction = rand() % 3;
+    }
+    else {
+        direction = rand() % 2;
+    }
     le_sens_direction.direction = direction;
-    int sens = rand() % 2;
+    sens = rand() % 2;
     le_sens_direction.sens = sens;
     return le_sens_direction;
 }
@@ -179,21 +190,62 @@ void affichage_grille(char** grille, int* dimensions) {
 
 
 char* tirer_mot(int longueur) {
-    char* mots_3 = {"ARA", "RAT", "TRI", "SUR"};
-    char* mots_4 = {"BANC", "TROP", "TARD", "PERD"};
-    char* mots_5 = {"CLAIR", "RATON", "ARBRE", "IDIOT"};
-    char* mots_6 = {"RENARD", "OBSCUR"};
-    char* mots_7 = {"REPTILE", "ABRICOT"};
-    char* mots_8 = {"ABDIQUAT"};
-    char* mots_9 = {"ABOIERONS"};
-    char* mots_10 = {"ABOMINABLE"};
-    char* mots_11 = {"ABIMERAIENT"};
-    char* mots_12 = {"INFORMATIQUE"};
-    char* mots_13 = {"ABRUTISSANTES"};
-    char* mots_14 = {"ACCOMPLIRAIENT"};
-    char* mots_15 = {"AFFRANCHISSABLE"};
-    char* mots_16 = {"ABASOURDISSAIENT"};
-
+    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR"};
+    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD"};
+    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT"};
+    static char* mots_6[] = {"RENARD", "OBSCUR"};
+    static char* mots_7[] = {"REPTILE", "ABRICOT"};
+    static char* mots_8[] = {"ABDIQUAT"};
+    static char* mots_9[] = {"ABOIERONS"};
+    static char* mots_10[] = {"ABOMINABLE"};
+    static char* mots_11[] = {"ABIMERAIENT"};
+    static char* mots_12[] = {"INFORMATIQUE"};
+    static char* mots_13[] = {"ABRUTISSANTES"};
+    static char* mots_14[] = {"ACCOMPLIRAIENT"};
+    static char* mots_15[] = {"AFFRANCHISSABLE"};
+    static char* mots_16[] = {"ABASOURDISSAIENT"};
+    if (longueur == 3) {
+        return mots_3[rand() % (sizeof(mots_3) / sizeof(mots_3[0]))];
+    }
+    if (longueur == 4) {
+        return mots_4[rand() % (sizeof(mots_4) / sizeof(mots_4[0]))];
+    }
+    if (longueur == 5) {
+        return mots_5[rand() % (sizeof(mots_5) / sizeof(mots_5[0]))];
+    }
+    if (longueur == 6) {
+        return mots_6[rand() % (sizeof(mots_6) / sizeof(mots_6[0]))];
+    }
+    if (longueur == 7) {
+        return mots_7[rand() % (sizeof(mots_7) / sizeof(mots_7[0]))];
+    }
+    if (longueur == 8) {
+        return mots_8[rand() % (sizeof(mots_8) / sizeof(mots_8[0]))];
+    }
+    if (longueur == 9) {
+        return mots_9[rand() % (sizeof(mots_9) / sizeof(mots_9[0]))];
+    }
+    if (longueur == 10) {
+        return mots_10[rand() % (sizeof(mots_10) / sizeof(mots_10[0]))];
+    }
+    if (longueur == 11) {
+        return mots_11[rand() % (sizeof(mots_11) / sizeof(mots_11[0]))];
+    }
+    if (longueur == 12) {
+        return mots_12[rand() % (sizeof(mots_12) / sizeof(mots_12[0]))];
+    }
+    if (longueur == 13) {
+        return mots_13[rand() % (sizeof(mots_13) / sizeof(mots_13[0]))];
+    }
+    if (longueur == 14) {
+        return mots_14[rand() % (sizeof(mots_14) / sizeof(mots_14[0]))];
+    }
+    if (longueur == 15) {
+        return mots_15[rand() % (sizeof(mots_15) / sizeof(mots_15[0]))];
+    }
+    else {
+        return mots_16[rand() % (sizeof(mots_16) / sizeof(mots_16[0]))];
+    }
 }
 
 void scores() {
