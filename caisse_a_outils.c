@@ -158,20 +158,22 @@ void complete_grille(char** grille, int* dimensions) {
 }
 
 void affichage_grille(char** grille, int* dimensions) {
+    printf(" ");
     for (int i = 0; i < dimensions[0]; i++) {
-        printf("_");
+        printf("--- ");
     }
     printf("\n");
-    for (int i = 0; i < dimensions[0]; i++) {
+    for (int k = 0; k < dimensions[0]; k++) {
+        printf("|");
         for (int j = 0; j < dimensions[1]; j++) {
-            printf("%c", grille[i][j]);
+            printf(" %c |", grille[k][j]);
         }
-            printf("\n");
-
-    }
-    printf("\n");
-    for (int i = 0; i < dimensions[0]; i++) {
-        printf("_");
+        printf("\n");
+        printf(" ");
+        for (int i = 0; i < dimensions[0]; i++) {
+            printf("--- ");
+        }
+        printf("\n");
     }
     printf("\n");
 }
