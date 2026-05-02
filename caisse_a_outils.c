@@ -49,6 +49,8 @@ void parametres(int* dimensions, Boolean* diagonale, int* time) {
 void get_dimensions(int* dimensions) {
     int tmp = 8;
     char dim[10] = "";
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF);
     printf("\033[2J\033[H");
     for (int i = 1; i < 3; i++) {
         do {
