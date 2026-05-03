@@ -21,6 +21,11 @@ typedef struct {
   Sens sens;
 } SensDirection;
 
+typedef struct {
+  char** grille;
+  char** mots;
+}grille_mots;
+
 /*
  * Cette procédure permet de vérifier que les fichiers de sauvegarde existent ou non
  * et de le créer sinon.
@@ -88,7 +93,7 @@ void get_time(int* time);
  * diagonale -> Boolean, un booléen qui nous dit si le joueur veut des mots en diagonale
  * return -> char**, un tableau de caractères à deux dimensions.
  */
-char** generation_grille(int* dimensions, Boolean diagonale);
+grille_mots generation_grille(int* dimensions, Boolean diagonale);
 
 /*
  * Cette fonction permet d'essayer de placer un mot dans la grille.
@@ -105,9 +110,12 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
  * Cette fonction permet de générer un SensDirection indiquant
  * dans quel sens et dans quelle direction un mot sera généré.
  * ------------------------------------------------------------
- * return -> SensDirection
+ * diagonale_autorise -> Boolean*, booléen indiquant si les mots peuvent être placés en diagonale
+ * dx -> int*, le déplacement en x
+ * dy -> int*, le déplacement en y
+ * return -> void
  */
-SensDirection choix_sens_direction();
+void choix_sens_direction(Boolean* diagonale_autorise, int* dx, int* dy);
 
 /*
  * Cette fonction permet de renvoyer l'indice de la plus petite valeur d'un tableau d'entiers.

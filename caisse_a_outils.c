@@ -34,13 +34,16 @@ void jeu() {
     Boolean diagonale = false;
     int time;
     parametres(dimensions, &diagonale, &time);
-    char** grille = generation_grille(dimensions, diagonale);
-    affichage_grille(grille, dimensions);
+    grille_mots da_grille = generation_grille(dimensions, diagonale);
+    affichage_grille(da_grille.grille, dimensions);
+    for (int i = 0 ; i < (sizeof(da_grille.mots) / sizeof(da_grille.mots[0])); i++) {
+        printf("%s\n", da_grille.mots[i]);
+    }
 }
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
     printf("\033[2J\033[H");
-    printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\n");
+    printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\nAppuyez sur Entree pour continuer.\n");
     get_dimensions(dimensions);
     get_diagonale(diagonale);
     get_time(time);
@@ -108,10 +111,13 @@ void get_time(int* time) {
     printf("Vous voulez jouer %d secondes.\n", choice);
 }
 
-char** generation_grille(int* dimensions, Boolean diagonale) {
+grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     printf("\033[2J\033[H");
     printf("Generation de la grille...\nPatientez...\n");
+    grille_mots ma_grille_mot;
+    int index_mots = 0;
     char** grille = (char**) malloc(dimensions[0] * sizeof(char*));
+    char** liste_mots = NULL;
     for (int i = 0; i < dimensions[0]; i++) {
         grille[i] = malloc(dimensions[1] * sizeof(char));
     }
@@ -126,38 +132,73 @@ char** generation_grille(int* dimensions, Boolean diagonale) {
     while (nombre_de_lettres > 2) {
       mot = tirer_mot(nombre_de_lettres);
       succes = placer_mot(grille, dimensions, mot, &diagonale);
-      if (succes == false) {
+        if (succes == true) {
+            liste_mots = realloc(liste_mots, sizeof(char*) * (index_mots + 1));
+            liste_mots[index_mots] = mot;
+            index_mots++;
+        }
+        else {
           nombre_de_lettres--;
       }
     }
     complete_grille(grille, dimensions);
-    return grille;
+    ma_grille_mot.grille = grille;
+    ma_grille_mot.mots = liste_mots;
+    return ma_grille_mot;
 }
 
 Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale) {
-    SensDirection sens_direction = choix_sens_direction(diagonale);
     int dx = 0;
     int dy = 0;
-    if (sens_direction.direction == horizontal) {
-        dx = 1;
-    }
-    else {
-        if (sens_direction.direction == vertical) {
-            dy = 1;
+    int start_x;
+    int start_y;
+    int x;
+    int y;
+    int lettres;
+    int longueur = strlen(mot);
+    for (int i = 0; i < 50; i++) {
+        choix_sens_direction(diagonale, &dx, &dy);
+        if (dx == 1) {
+            x = rand() % (dimensions[0] - longueur + 1);
+        } else if (dx == -1) {
+            x = rand() % (dimensions[0] - longueur + 1) + (longueur - 1);
+        } else {
+            x = rand() % dimensions[0];
         }
-        else {
-            dx = 1;
-            dy = 1;
+
+        if (dy == 1) {
+            y = rand() % (dimensions[1] - longueur + 1);
+        } else if (dy == -1) {
+            y = rand() % (dimensions[1] - longueur + 1) + (longueur - 1);
+        } else {
+            y = rand() % dimensions[1];
+        }
+        start_x = x;
+        start_y = y;
+        lettres = 0;
+        while (((x >= 0 && x < dimensions[0]) && (y >= 0 && y < dimensions[1])) && (grille[x][y] == '@' || grille[x][y] == mot[lettres]) && lettres < longueur) {
+            x += dx;
+            y += dy;
+            lettres++;
+        }
+        if (lettres == longueur) {
+            x = start_x;
+            y = start_y;
+            for (int i = 0; i < longueur; i++) {
+                grille[x][y] = mot[i];
+                x += dx;
+                y += dy;
+            }
+            return true;
         }
     }
-    if (sens_direction.sens == envers) {
-        dx = -dx;
-        dy = -dy;
-    }
+    return false;
 
 }
 
-SensDirection choix_sens_direction(Boolean* diagonale_autorise) {
+void choix_sens_direction(Boolean* diagonale_autorise, int* dx, int* dy) {
+    *dx = 0;
+    *dy = 0;
     SensDirection le_sens_direction;
     int direction;
     int sens;
@@ -170,7 +211,22 @@ SensDirection choix_sens_direction(Boolean* diagonale_autorise) {
     le_sens_direction.direction = direction;
     sens = rand() % 2;
     le_sens_direction.sens = sens;
-    return le_sens_direction;
+    if (le_sens_direction.direction == horizontal) {
+        *dx = 1;
+    }
+    else {
+        if (le_sens_direction.direction == vertical) {
+            *dy = 1;
+        }
+        else {
+            *dx = 1;
+            *dy = 1;
+        }
+    }
+    if (le_sens_direction.sens == envers) {
+        *dx = -*dx;
+        *dy = -*dy;
+    }
 }
 
 int recherche_minimum(int* tableau, int size) {
@@ -215,18 +271,18 @@ void affichage_grille(char** grille, int* dimensions) {
 
 
 char* tirer_mot(int longueur) {
-    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR"};
-    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD"};
-    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT"};
+    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB"};
+    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
+    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
     static char* mots_6[] = {"RENARD", "OBSCUR"};
     static char* mots_7[] = {"REPTILE", "ABRICOT"};
     static char* mots_8[] = {"ABDIQUAT"};
-    static char* mots_9[] = {"ABOIERONS"};
+    static char* mots_9[] = {"ABOIERONS", "CARREMENT"};
     static char* mots_10[] = {"ABOMINABLE"};
     static char* mots_11[] = {"ABIMERAIENT"};
     static char* mots_12[] = {"INFORMATIQUE"};
     static char* mots_13[] = {"ABRUTISSANTES"};
-    static char* mots_14[] = {"ACCOMPLIRAIENT"};
+    static char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
     static char* mots_15[] = {"AFFRANCHISSABLE"};
     static char* mots_16[] = {"ABASOURDISSAIENT"};
     if (longueur == 3) {
