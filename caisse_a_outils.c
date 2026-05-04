@@ -32,13 +32,50 @@ void jeu() {
     printf("\033[2J\033[H");
     int dimensions[2] = {8, 8};
     Boolean diagonale = false;
-    int time;
-    parametres(dimensions, &diagonale, &time);
+    float score = 0;
+    int temps;
+    char* nom_utilisateur;
+    parametres(dimensions, &diagonale, &temps);
     grille_mots da_grille = generation_grille(dimensions, diagonale);
     affichage_grille(da_grille.grille, dimensions);
-    for (int i = 0 ; i < (sizeof(da_grille.mots) / sizeof(da_grille.mots[0])); i++) {
-        printf("%s\n", da_grille.mots[i]);
+    time_t debut = time(0);
+    time_t maintenant = time(0);
+    char mot_devine[16];
+    Boolean mot_trouve = false;
+    int nb_mots_trouves = 0;
+    printf("Nombre de mots : %d\n", da_grille.nb_mots);
+    char** mots_trouves_user = (char**) malloc(sizeof(char*) * da_grille.nb_mots);
+    while ((int)(maintenant - debut) < temps) {
+        maintenant = time(0);
+        printf("C'est parti ! Entrez un mot : \n");
+        fgets(mot_devine, sizeof(mot_devine), stdin);
+        mot_devine[strcspn(mot_devine, "\n")] = '\0';
+        for (int i = 0; i < da_grille.nb_mots; i++) {
+            if (da_grille.mots[i] != NULL && strcmp(da_grille.mots[i], mot_devine) == 0) {
+                mot_trouve = true;
+                nb_mots_trouves++;
+                mots_trouves_user[nb_mots_trouves-1] = da_grille.mots[i];
+                da_grille.mots[i] = NULL;
+            }
+        }
+        if (mot_trouve) {
+            printf("Felicitations ! Vous avez trouve le mot %s.\n", mot_devine);
+        }
+        else {
+            printf("Mot incorrect ou déjà trouve !\n");
+        }
+        mot_trouve = false;
     }
+    printf("La partie est terminée !\n");
+    free(da_grille.grille);
+    free(da_grille.mots);
+    for (int i = 0; i < nb_mots_trouves ;i++) {
+        score += pow(strlen(mots_trouves_user[i]), 4.0/3.0);
+    }
+    printf("Voici votre score : %.2f.\n", score);
+    printf("Quel est votre nom ? \n");
+    fgets(nom_utilisateur, sizeof(nom_utilisateur), stdin);
+    printf("Merci ! Votre nom a ete stocke au milieu de celui des vainqueurs !\n");
 }
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
@@ -144,6 +181,7 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     complete_grille(grille, dimensions);
     ma_grille_mot.grille = grille;
     ma_grille_mot.mots = liste_mots;
+    ma_grille_mot.nb_mots = index_mots;
     return ma_grille_mot;
 }
 

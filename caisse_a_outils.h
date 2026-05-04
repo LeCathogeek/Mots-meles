@@ -9,6 +9,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
 
 typedef enum {false=0, true=1} Boolean;
 
@@ -24,6 +25,7 @@ typedef struct {
 typedef struct {
   char** grille;
   char** mots;
+  int nb_mots;
 }grille_mots;
 
 /*
