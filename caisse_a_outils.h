@@ -153,7 +153,7 @@ char* tirer_mot(int longueur);
  * score -> int, le score du joueur
  * return -> void
  */
-void save_score(char* nom_utilisateur, int score);
+void save_score(char* nom_utilisateur, float score);
 
 /*
  * Cette procédure permet d'afficher les meilleurs scores.

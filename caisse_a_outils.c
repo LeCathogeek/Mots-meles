@@ -359,10 +359,10 @@ char* tirer_mot(int longueur) {
     }
 }
 
-void save_score(char* nom_utilisateur, int score) {
+void save_score(char* nom_utilisateur, float score) {
     FILE *file;
     file = fopen("save.txt", "a");
-    fprintf(file, "%s %d\n", nom_utilisateur, score);
+    fprintf(file, "%s %.2f\n", nom_utilisateur, score);
     fclose(file);
 }
 
