@@ -3,15 +3,6 @@
 //
 #include "caisse_a_outils.h"
 
-void ensure_save_file() {
-    FILE *file;
-    file = fopen("save.txt", "r");
-    if (file == NULL) {
-        file = fopen("save.txt", "w");
-        fputs("", file);
-        fclose(file);
-    }
-}
 
 int controle_d_acquisition() {
     char choix[10];
@@ -75,7 +66,8 @@ void jeu() {
     printf("Voici votre score : %.2f.\n", score);
     printf("Quel est votre nom ? \n");
     fgets(nom_utilisateur, sizeof(nom_utilisateur), stdin);
-    printf("Merci ! Votre nom a ete stocke au milieu de celui des vainqueurs !\n");
+    save_score(nom_utilisateur, score);
+    printf("Merci %s ! Votre nom a ete stocke au milieu de celui des vainqueurs !\n", nom_utilisateur);
 }
 
 void parametres(int* dimensions, Boolean* diagonale, int* time) {
@@ -365,6 +357,13 @@ char* tirer_mot(int longueur) {
     else {
         return mots_16[rand() % (sizeof(mots_16) / sizeof(mots_16[0]))];
     }
+}
+
+void save_score(char* nom_utilisateur, int score) {
+    FILE *file;
+    file = fopen("save.txt", "a");
+    fprintf(file, "%s %d\n", nom_utilisateur, score);
+    fclose(file);
 }
 
 void scores() {

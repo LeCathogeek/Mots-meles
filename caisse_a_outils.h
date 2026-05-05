@@ -29,14 +29,6 @@ typedef struct {
 }grille_mots;
 
 /*
- * Cette procédure permet de vérifier que les fichiers de sauvegarde existent ou non
- * et de le créer sinon.
- * ------------------------------------------------------------------------------------
- * return -> void
- */
-void ensure_save_file();
-
-/*
  * Cette fonction permet d'effectuer le contrôle d'acquisition au début du jeu
  * afin de savoir si l'utilisateur veut jouer, regarder les meilleurs scores ou quitter le jeu.
  * --------------------------------------------------------------------------------------------
@@ -153,6 +145,15 @@ void affichage_grille(char** grille, int* dimensions);
  * return -> char*, le mot souhaité
  */
 char* tirer_mot(int longueur);
+
+/*
+ * Cette procédure permet d'ajouter un nouveau record à la liste des meilleurs scores.
+ * -----------------------------------------------------------------------------------
+ * nom_utilisateur -> char*, le nom du joueur qui vient de terminer la partie
+ * score -> int, le score du joueur
+ * return -> void
+ */
+void save_score(char* nom_utilisateur, int score);
 
 /*
  * Cette procédure permet d'afficher les meilleurs scores.

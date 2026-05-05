@@ -5,7 +5,6 @@
 //Section programme principal
 int main(void) {
     srand(time(0));
-    ensure_save_file();
     printf("Bonjour et bienvenue dans notre super jeu de mots meles !\n");
     int choix = controle_d_acquisition();
     if (choix == 0) {
