@@ -30,6 +30,8 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
     char* mot;
     Boolean succes = true;
+
+    //Tant que nos mots font au moins 3 lettres, on essaye de les placer comme on peut
     while (nombre_de_lettres > 2) {
       mot = tirer_mot(nombre_de_lettres);
       succes = placer_mot(grille, dimensions, mot, &diagonale);
@@ -42,7 +44,11 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
           nombre_de_lettres--;
       }
     }
+
+    //On complète les trous restants de la grille (les @) avec des lettres random
     complete_grille(grille, dimensions);
+
+    //On place nos infos dans notre structure ma_grille_mot et on la renvoie
     ma_grille_mot.grille = grille;
     ma_grille_mot.mots = liste_mots;
     ma_grille_mot.nb_mots = index_mots;
@@ -50,39 +56,62 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
 }
 
 Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale) {
+    //Initialisation des variables de base
+
+    //Le déplacement
     int dx = 0;
     int dy = 0;
+
+    //La position initialie
     int start_x;
     int start_y;
+
+    //La position actuelle
     int x;
     int y;
+
+    //Le nombre de lettres actuellement pouvant être placées et la longueur du mot
     int lettres;
     int longueur = strlen(mot);
+
+    //On essaie 50 fois (si on y arrive pas, on considère qu'on ne peut plus placer de mots de cette taille)
     for (int i = 0; i < 50; i++) {
+        //On choisit une direction random
         choix_sens_direction(diagonale, &dx, &dy);
         if (dx == 1) {
+            //Si on avance vers la droite, on place le mot entre le début et la place la plus loin possible
             x = rand() % (dimensions[0] - longueur + 1);
         } else if (dx == -1) {
+            //Si on va vers la gauche, on se place vers la fin
             x = rand() % (dimensions[0] - longueur + 1) + (longueur - 1);
         } else {
+            //Sinon, on se place où l'on veut
             x = rand() % dimensions[0];
         }
 
         if (dy == 1) {
+            //On se place vers le haut de la matrice
             y = rand() % (dimensions[1] - longueur + 1);
         } else if (dy == -1) {
+            //On se place vers le bas de la matrice
             y = rand() % (dimensions[1] - longueur + 1) + (longueur - 1);
         } else {
+            //On se place n'importe où
             y = rand() % dimensions[1];
         }
+
+        //On affecte nos positions initiales
         start_x = x;
         start_y = y;
         lettres = 0;
+
+        //Tant qu'on peut placer nos lettres (que les cases traversées sont des @), on continue...
         while (((x >= 0 && x < dimensions[0]) && (y >= 0 && y < dimensions[1])) && (grille[x][y] == '@' || grille[x][y] == mot[lettres]) && lettres < longueur) {
             x += dx;
             y += dy;
             lettres++;
         }
+        //Si on est arrivé au bout, alors on place vraiment notre mot
         if (lettres == longueur) {
             x = start_x;
             y = start_y;
@@ -91,9 +120,11 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
                 x += dx;
                 y += dy;
             }
+            //Et on retourne true
             return true;
         }
     }
+    //Sinon on n'a pas pu placer et on retourne false
     return false;
 }
 
