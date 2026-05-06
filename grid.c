@@ -4,20 +4,29 @@
 #include "grid.h"
 
 grille_mots generation_grille(int* dimensions, Boolean diagonale) {
+    //Nettoyage de l'affichage et message d'attente
     printf("\033[2J\033[H");
     printf("Generation de la grille...\nPatientez...\n");
+
+    //Initialisation de la structure (grille, mots cachés dans la grille et nombre de mots)
     grille_mots ma_grille_mot;
+    //Ainsi que des variables utilisées pour ma_grille_mot
     int index_mots = 0;
-    char** grille = (char**) malloc(dimensions[0] * sizeof(char*));
     char** liste_mots = NULL;
+
+    //Initialisation de la grille elle-même (en 2D)
+    char** grille = (char**) malloc(dimensions[0] * sizeof(char*));
     for (int i = 0; i < dimensions[0]; i++) {
         grille[i] = malloc(dimensions[1] * sizeof(char));
     }
+    //On la remplit de @
     for (int i = 0; i < dimensions[0]; i++) {
         for (int j = 0; j < dimensions[1]; j++) {
           grille[i][j] = '@';
         }
     }
+
+    //Le nombre de lettres de base est celui de la plus petite dimension du tableau
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
     char* mot;
     Boolean succes = true;
@@ -167,7 +176,7 @@ char* tirer_mot(int longueur) {
     char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
     char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
     char* mots_6[] = {"RENARD", "OBSCUR"};
-    char* mots_7[] = {"REPTILE", "ABRICOT"};
+    char* mots_7[] = {"REPTILE", "ABRICOT", "GRATUIT"};
     char* mots_8[] = {"ABDIQUAT"};
     char* mots_9[] = {"ABOIERONS", "CARREMENT"};
     char* mots_10[] = {"ABOMINABLE"};
