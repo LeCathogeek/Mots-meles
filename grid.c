@@ -19,7 +19,7 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     for (int i = 0; i < dimensions[0]; i++) {
         grille[i] = malloc(dimensions[1] * sizeof(char));
     }
-    //On la remplit de @
+    //On la remplit de caractères "@".
     for (int i = 0; i < dimensions[0]; i++) {
         for (int j = 0; j < dimensions[1]; j++) {
           grille[i][j] = '@';
@@ -30,15 +30,20 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
     char* mot;
     Boolean succes = true;
-
     //Tant que nos mots font au moins 3 lettres, on essaye de les placer comme on peut
     while (nombre_de_lettres > 2) {
       mot = tirer_mot(nombre_de_lettres);
       succes = placer_mot(grille, dimensions, mot, &diagonale);
         if (succes == true) {
-            liste_mots = realloc(liste_mots, sizeof(char*) * (index_mots + 1));
-            liste_mots[index_mots] = mot;
             index_mots++;
+            char** tmp = realloc(liste_mots, sizeof(char*) * index_mots);
+            if (tmp == NULL) {
+                printf("Erreur lors de la réallocation.\n");
+            }
+            else {
+                liste_mots = tmp;
+                liste_mots[index_mots - 1] = mot;
+            }
         }
         else {
           nombre_de_lettres--;
@@ -61,7 +66,7 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
     int dx = 0;
     int dy = 0;
 
-    //La position initialie
+    //La position initiale
     int start_x;
     int start_y;
 
@@ -73,7 +78,7 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
     int lettres;
     int longueur = strlen(mot);
 
-    //On essaie 50 fois (si on y arrive pas, on considère qu'on ne peut plus placer de mots de cette taille)
+    //On essaie 50 fois (si on n'y arrive pas, on considère qu'on ne peut plus placer de mots de cette taille).
     for (int i = 0; i < 50; i++) {
         //On choisit une direction random
         choix_sens_direction(diagonale, &dx, &dy);
@@ -175,8 +180,8 @@ int recherche_minimum(int* tableau, int size) {
 }
 
 void complete_grille(char** grille, int* dimensions) {
-    //On parcoure notre tableaux à deux dimensions, si on trouve un @ on le remplace par un caractère
-    //ASCII random entre 65 et 91 (les lettres de l'alphabet en majuscule)
+    //On parcourt notre tableau à deux dimensions, si on trouve un @ on le remplace par un caractère
+    //ASCII random entre 65 et 91 (les lettres de l'alphabet en majuscule).
     for (int i = 0; i < dimensions[0]; i++) {
     for (int j = 0; j < dimensions[1]; j++) {
       if (grille[i][j] == '@') {
@@ -209,21 +214,21 @@ void affichage_grille(char** grille, int* dimensions) {
 
 char* tirer_mot(int longueur) {
     //On fait plusieurs listes de mots selon leur longueur
-    char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB"};
-    char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
-    char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
-    char* mots_6[] = {"RENARD", "OBSCUR", "BADANT"};
-    char* mots_7[] = {"REPTILE", "ABRICOT", "GRATUIT"};
-    char* mots_8[] = {"ABDIQUAT"};
-    char* mots_9[] = {"ABOIERONS", "CARREMENT", "ILLUSOIRE", "ATTENTION"};
-    char* mots_10[] = {"ABOMINABLE", "ANACHORETE"};
-    char* mots_11[] = {"ABIMERAIENT", "SINUSOIDALE"};
-    char* mots_12[] = {"INFORMATIQUE"};
-    char* mots_13[] = {"ABRUTISSANTES"};
-    char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
-    char* mots_15[] = {"AFFRANCHISSABLE"};
-    char* mots_16[] = {"ABASOURDISSAIENT"};
-    //Ensuite en fonction de la longueur du mot souhaité, on revoie un mot au hasard dans la liste des mots de la longueur correspondante
+    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB", "MOT", "RUE"};
+    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR", "GARE", "COUP"};
+    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
+    static char* mots_6[] = {"RENARD", "OBSCUR", "BADANT", "PRETRE", "PRETER", "RUELLE", "COUPER", "VENDRE"};
+    static char* mots_7[] = {"REPTILE", "ABRICOT", "GRATUIT", "ACHETER"};
+    static char* mots_8[] = {"ABDIQUAT"};
+    static char* mots_9[] = {"ABOIERONS", "CARREMENT", "ILLUSOIRE", "ATTENTION"};
+    static char* mots_10[] = {"ABOMINABLE", "ANACHORETE", "ABOUTIRIEZ", "VIEILLOTTE", "VIEILLIREZ"};
+    static char* mots_11[] = {"ABIMERAIENT", "SINUSOIDALE"};
+    static char* mots_12[] = {"INFORMATIQUE"};
+    static char* mots_13[] = {"ABRUTISSANTES"};
+    static char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
+    static char* mots_15[] = {"AFFRANCHISSABLE"};
+    static char* mots_16[] = {"ABASOURDISSAIENT"};
+    //Ensuite en fonction de la longueur du mot souhaité, on renvoie un mot au hasard dans la liste des mots de la longueur correspondante.
     if (longueur == 3) {
         return mots_3[rand() % (sizeof(mots_3) / sizeof(mots_3[0]))];
     }
