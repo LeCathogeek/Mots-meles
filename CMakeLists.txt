@@ -4,7 +4,8 @@ project(u_p26_etienne_pacault_jeu_de_lettres C)
 set(CMAKE_C_STANDARD 99)
 
 add_library(GameLibrary jeu.h jeu.c)
-add_library(StructuresLibrary structures.h)
+add_library(StructuresLibrary structures.h
+        structures.c)
 add_library(SettingLibrary parametres.h parametres.c)
 add_library(GridLibrary grid.h grid.c)
 add_library(ScoreLibrary score.h score.c)
