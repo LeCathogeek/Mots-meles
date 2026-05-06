@@ -15,25 +15,25 @@
 #include "grid.h"
 #include "score.h"
 
-/*
+/**
  * Cette fonction permet d'effectuer le contrôle d'acquisition au début du jeu
  * afin de savoir si l'utilisateur veut jouer, regarder les meilleurs scores ou quitter le jeu.
  * --------------------------------------------------------------------------------------------
- * return -> void
+ * @return -> void
  */
 void controle_d_acquisition();
 
-/*
+/**
  * Cette procédure permet de lancer le jeu.
  * -----------------------------------------
- * return -> void
+ * @return -> void
  */
 void jeu();
 
-/*
+/**
  * Cette procédure permet d'afficher les meilleurs scores.
  * -------------------------------------------------------
- * return -> void
+ * @return -> void
  */
 void scores();
 
