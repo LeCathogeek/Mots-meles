@@ -44,7 +44,6 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
           nombre_de_lettres--;
       }
     }
-
     //On complète les trous restants de la grille (les @) avec des lettres random
     complete_grille(grille, dimensions);
 
@@ -129,8 +128,11 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
 }
 
 void choix_sens_direction(Boolean* diagonale_autorise, int* dx, int* dy) {
+    //On réinitialise nos valeurs de direction en commençant à 0 pour dx et dy
     *dx = 0;
     *dy = 0;
+
+    //On prépare notre SensDirection
     SensDirection le_sens_direction;
     int direction;
     int sens;
@@ -162,6 +164,7 @@ void choix_sens_direction(Boolean* diagonale_autorise, int* dx, int* dy) {
 }
 
 int recherche_minimum(int* tableau, int size) {
+    //Recherche de minimum classique
     int minimum = 0;
     for (int i = 0; i < size; i++) {
         if (tableau[i] < tableau[minimum]) {
@@ -172,6 +175,8 @@ int recherche_minimum(int* tableau, int size) {
 }
 
 void complete_grille(char** grille, int* dimensions) {
+    //On parcoure notre tableaux à deux dimensions, si on trouve un @ on le remplace par un caractère
+    //ASCII random entre 65 et 91 (les lettres de l'alphabet en majuscule)
     for (int i = 0; i < dimensions[0]; i++) {
     for (int j = 0; j < dimensions[1]; j++) {
       if (grille[i][j] == '@') {
@@ -203,20 +208,22 @@ void affichage_grille(char** grille, int* dimensions) {
 
 
 char* tirer_mot(int longueur) {
+    //On fait plusieurs listes de mots selon leur longueur
     char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB"};
     char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
     char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
-    char* mots_6[] = {"RENARD", "OBSCUR"};
+    char* mots_6[] = {"RENARD", "OBSCUR", "BADANT"};
     char* mots_7[] = {"REPTILE", "ABRICOT", "GRATUIT"};
     char* mots_8[] = {"ABDIQUAT"};
-    char* mots_9[] = {"ABOIERONS", "CARREMENT"};
-    char* mots_10[] = {"ABOMINABLE"};
-    char* mots_11[] = {"ABIMERAIENT"};
+    char* mots_9[] = {"ABOIERONS", "CARREMENT", "ILLUSOIRE", "ATTENTION"};
+    char* mots_10[] = {"ABOMINABLE", "ANACHORETE"};
+    char* mots_11[] = {"ABIMERAIENT", "SINUSOIDALE"};
     char* mots_12[] = {"INFORMATIQUE"};
     char* mots_13[] = {"ABRUTISSANTES"};
     char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
     char* mots_15[] = {"AFFRANCHISSABLE"};
     char* mots_16[] = {"ABASOURDISSAIENT"};
+    //Ensuite en fonction de la longueur du mot souhaité, on revoie un mot au hasard dans la liste des mots de la longueur correspondante
     if (longueur == 3) {
         return mots_3[rand() % (sizeof(mots_3) / sizeof(mots_3[0]))];
     }

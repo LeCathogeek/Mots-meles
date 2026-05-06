@@ -6,7 +6,8 @@
 int main(void) {
     //Initialisation des nombres aléatoires
     srand(time(0));
+    int dimensions[2] = {10, 15};
     printf("Bonjour et bienvenue dans notre super jeu de mots meles !\n");
-    controle_d_acquisition();
+    affichage_grille(generation_grille(dimensions, false).grille, dimensions);
     return 0;
 }

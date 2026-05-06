@@ -64,7 +64,7 @@ void jeu() {
     time_t maintenant = time(0);
 
     //Variables pour le jeu
-    char mot_devine[16];
+    char mot_devine[18];
     Boolean mot_trouve = false;
     int nb_mots_trouves = 0;
     char** mots_trouves_user = (char**) malloc(sizeof(char*) * da_grille.nb_mots);
@@ -76,6 +76,15 @@ void jeu() {
         //Lecture de l'entrée utilisateur
         printf("C'est parti ! Entrez un mot : \n");
         fgets(mot_devine, sizeof(mot_devine), stdin);
+        int j = 0;
+        char ch;
+        char tmp[18];
+        while (mot_devine[j]) {
+            ch = mot_devine[j];
+            tmp[j] = toupper(ch);
+            j++;
+        }
+        strcpy(mot_devine, tmp);
         mot_devine[strcspn(mot_devine, "\n")] = '\0'; //On remplace la première occurence de retour à la ligne par une fin de string
 
         //On vérifie si le mot entré est dans la grille
@@ -103,6 +112,9 @@ void jeu() {
     }
 
     //Libération des tableaux mallocés
+    for (int i = 0; i < dimensions[0]; i++) {
+        free(da_grille.grille[i]);
+    }
     free(da_grille.grille);
     free(da_grille.mots);
 
