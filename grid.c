@@ -1,144 +1,7 @@
 //
-// Created by etienne on 29/04/2026.
+// Created by etienne on 06/05/2026.
 //
-#include "caisse_a_outils.h"
-
-
-int controle_d_acquisition() {
-    char choix[10];
-    int result = 0;
-    do {
-        printf("\033[2J\033[H");
-        printf("Que voulez-vous faire ? (entrez comme réponse l'entier correspondant)\n  - Demarrer une partie (0)\n  - Afficher les meilleurs scores (1)\n  - Quitter (2)\n");
-        fgets(choix, sizeof(choix),  stdin);
-        if (choix[0] != '0' && choix[0] != '1' && choix[0] != '2') {
-            printf("Attention ! Votre réponse est incorrecte !\nDonnez un entier situe entre 0 et 2 indiquant votre réponse.\n");
-        }
-    } while (choix[0] != '0' && choix[0] != '1' && choix[0] != '2');
-    sscanf(&choix[0], "%d", &result);
-    return result;
-}
-
-void jeu() {
-    printf("\033[2J\033[H");
-    int dimensions[2] = {8, 8};
-    Boolean diagonale = false;
-    float score = 0;
-    int temps;
-    char* nom_utilisateur;
-    parametres(dimensions, &diagonale, &temps);
-    grille_mots da_grille = generation_grille(dimensions, diagonale);
-    affichage_grille(da_grille.grille, dimensions);
-    time_t debut = time(0);
-    time_t maintenant = time(0);
-    char mot_devine[16];
-    Boolean mot_trouve = false;
-    int nb_mots_trouves = 0;
-    printf("Nombre de mots : %d\n", da_grille.nb_mots);
-    char** mots_trouves_user = (char**) malloc(sizeof(char*) * da_grille.nb_mots);
-    while ((int)(maintenant - debut) < temps) {
-        maintenant = time(0);
-        printf("C'est parti ! Entrez un mot : \n");
-        fgets(mot_devine, sizeof(mot_devine), stdin);
-        mot_devine[strcspn(mot_devine, "\n")] = '\0';
-        for (int i = 0; i < da_grille.nb_mots; i++) {
-            if (da_grille.mots[i] != NULL && strcmp(da_grille.mots[i], mot_devine) == 0) {
-                mot_trouve = true;
-                nb_mots_trouves++;
-                mots_trouves_user[nb_mots_trouves-1] = da_grille.mots[i];
-                da_grille.mots[i] = NULL;
-            }
-        }
-        if (mot_trouve) {
-            printf("Felicitations ! Vous avez trouve le mot %s.\n", mot_devine);
-        }
-        else {
-            printf("Mot incorrect ou déjà trouve !\n");
-        }
-        mot_trouve = false;
-    }
-    printf("La partie est terminée !\n");
-    free(da_grille.grille);
-    free(da_grille.mots);
-    for (int i = 0; i < nb_mots_trouves ;i++) {
-        score += pow(strlen(mots_trouves_user[i]), 4.0/3.0);
-    }
-    printf("Voici votre score : %.2f.\n", score);
-    printf("Quel est votre nom ? \n");
-    fgets(nom_utilisateur, sizeof(nom_utilisateur), stdin);
-    save_score(nom_utilisateur, score);
-    printf("Merci %s ! Votre nom a ete stocke au milieu de celui des vainqueurs !\n", nom_utilisateur);
-}
-
-void parametres(int* dimensions, Boolean* diagonale, int* time) {
-    printf("\033[2J\033[H");
-    printf("Bonjour ! Avant de commencer une partie, veuillez nous indiquer les dimensions de votre grille de jeu.\n - Votre grille peut avoir une taille allant de 8 x 8 a 16 x 16.\n - Votre grille peut etre rectangulaire.\nAppuyez sur Entree pour continuer.\n");
-    get_dimensions(dimensions);
-    get_diagonale(diagonale);
-    get_time(time);
-}
-
-void get_dimensions(int* dimensions) {
-    int tmp = 8;
-    char dim[10] = "";
-    char c;
-    while ((c = getchar()) != '\n' && c != EOF);
-    printf("\033[2J\033[H");
-    for (int i = 1; i < 3; i++) {
-        do {
-            printf("Veuillez entrer la valeur de la dimension %d. (Un nombre entier situe entre 8 et 16)\n", i);
-            fgets(dim, sizeof(dim), stdin);
-            sscanf(dim, "%d", &tmp);
-            if (tmp < 8 || tmp > 16) {
-                printf("Attention ! Vous n'avez pas fourni une dimension correcte !\nEntrez un nombre entier compris entre 8 et 16 !\n");
-            }
-        } while (tmp < 8 || tmp > 16);
-        if (i == 1) {
-            dimensions[0] = tmp;
-        }
-        else {
-            dimensions[1] = tmp;
-        }
-    }
-    printf("Les dimensions de la grille ont bien ete configurees !\nVotre grille fait %dx%d cases.\n", dimensions[0], dimensions[1]);
-}
-
-void get_diagonale(Boolean* diagonale) {
-  printf("\033[2J\033[H");
-  char tmp[10];
-  int choice = 2;
-  do {
-    printf("Voulez-vous jouer avec la regle des diagonales ? Tapez 0 pour non et 1 pour oui.\n");
-      fgets(tmp, sizeof(tmp), stdin);
-      sscanf(tmp, "%d", &choice);
-      if (choice != 0 && choice != 1) {
-          printf("Attention ! Tapez 0 pour non et 1 pour oui.\n");
-      }
-  } while (choice != 0 && choice != 1);
-  *diagonale = choice;
-    if (*diagonale == true) {
-        printf("Vous avez choisi la regle des diagonales.\n");
-    }
-    else {
-        printf("Vous avez refuse de jouer avec des mots en diagonale.\n");
-    }
-}
-
-void get_time(int* time) {
-    printf("\033[2J\033[H");
-    char tmp[10];
-    int choice = 0;
-    do {
-        printf("Combien de temps voulez-vous jouer ? Entrez votre réponse en secondes (entre 60 et 180 secondes)\n");
-        fgets(tmp, sizeof(tmp), stdin);
-        sscanf(tmp, "%d", &choice);
-        if (choice < 60 || choice > 180) {
-            printf("Attention ! Entrez bien un entier compris en 60 et 180.\n");
-        }
-    } while (choice < 60 || choice > 180);
-    *time = choice;
-    printf("Vous voulez jouer %d secondes.\n", choice);
-}
+#include "grid.h"
 
 grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     printf("\033[2J\033[H");
@@ -223,7 +86,6 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
         }
     }
     return false;
-
 }
 
 void choix_sens_direction(Boolean* diagonale_autorise, int* dx, int* dy) {
@@ -357,15 +219,4 @@ char* tirer_mot(int longueur) {
     else {
         return mots_16[rand() % (sizeof(mots_16) / sizeof(mots_16[0]))];
     }
-}
-
-void save_score(char* nom_utilisateur, float score) {
-    FILE *file;
-    file = fopen("save.txt", "a");
-    fprintf(file, "%s %.2f\n", nom_utilisateur, score);
-    fclose(file);
-}
-
-void scores() {
-    printf("\033[2J\033[H");
 }
