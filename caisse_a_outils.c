@@ -301,20 +301,20 @@ void affichage_grille(char** grille, int* dimensions) {
 
 
 char* tirer_mot(int longueur) {
-    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB"};
-    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
-    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
-    static char* mots_6[] = {"RENARD", "OBSCUR"};
-    static char* mots_7[] = {"REPTILE", "ABRICOT"};
-    static char* mots_8[] = {"ABDIQUAT"};
-    static char* mots_9[] = {"ABOIERONS", "CARREMENT"};
-    static char* mots_10[] = {"ABOMINABLE"};
-    static char* mots_11[] = {"ABIMERAIENT"};
-    static char* mots_12[] = {"INFORMATIQUE"};
-    static char* mots_13[] = {"ABRUTISSANTES"};
-    static char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
-    static char* mots_15[] = {"AFFRANCHISSABLE"};
-    static char* mots_16[] = {"ABASOURDISSAIENT"};
+    char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB"};
+    char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR"};
+    char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
+    char* mots_6[] = {"RENARD", "OBSCUR"};
+    char* mots_7[] = {"REPTILE", "ABRICOT"};
+    char* mots_8[] = {"ABDIQUAT"};
+    char* mots_9[] = {"ABOIERONS", "CARREMENT"};
+    char* mots_10[] = {"ABOMINABLE"};
+    char* mots_11[] = {"ABIMERAIENT"};
+    char* mots_12[] = {"INFORMATIQUE"};
+    char* mots_13[] = {"ABRUTISSANTES"};
+    char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
+    char* mots_15[] = {"AFFRANCHISSABLE"};
+    char* mots_16[] = {"ABASOURDISSAIENT"};
     if (longueur == 3) {
         return mots_3[rand() % (sizeof(mots_3) / sizeof(mots_3[0]))];
     }
