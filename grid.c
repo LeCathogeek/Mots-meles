@@ -140,7 +140,11 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
                 x += dx;
                 y += dy;
             }
-            liste_mots = realloc(liste_mots, sizeof(mot) * (index_mots + 1));
+            liste_mots = (Mot*) realloc(liste_mots, sizeof(Mot) * (index_mots + 1));
+            if (liste_mots == NULL) {
+                printf("Erreur lors de la réallocation !\n");
+                return false;
+            }
             liste_mots[index_mots].mot = mot;
             liste_mots[index_mots].longueur = longueur;
             liste_mots[index_mots].start_x = start_x;

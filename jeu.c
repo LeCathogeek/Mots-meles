@@ -48,7 +48,7 @@ void jeu() {
     Mot* liste_mots_pos = (Mot*) malloc(sizeof(Mot) * 1);
     //Variables pour la fin de la partie
     float score = 0;
-    char* nom_utilisateur;
+    char nom_utilisateur[256];
 
     //Saisie des paramètres par le joueur
     parametres(dimensions, &diagonale, &temps);
