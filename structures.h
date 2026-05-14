@@ -22,4 +22,19 @@ typedef struct {
     int nb_mots;
 }grille_mots;
 
+typedef struct {
+    char** mots;
+    int count;
+} ListeMots;
+
+typedef struct {
+    ListeMots* listes;
+    int max_length;
+} Dictionnaire;
+
+typedef struct {
+    char* nom;
+    float score;
+} Joueur;
+
 #endif //U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_STRUCTURES_H

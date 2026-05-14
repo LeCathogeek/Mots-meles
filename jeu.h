@@ -4,6 +4,7 @@
 
 #ifndef U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_JEU_H
 #define U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_JEU_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,8 +34,9 @@ void jeu();
 /**
  * Cette procédure permet d'afficher les meilleurs scores.
  * -------------------------------------------------------
+ * @param les_joueurs -> Joueur*, la liste des joueurs
  * @return -> void
  */
-void scores();
+void scores(Joueur* les_joueurs);
 
 #endif //U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_JEU_H

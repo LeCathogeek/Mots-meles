@@ -6,14 +6,24 @@
 #define U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_GRID_H
 #include "jeu.h"
 
+typedef struct {
+    int longueur;
+    char* chaine;
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
+} Mot;
+
 /**
  * Cette fonction permet de générer une grille de mots prête à l'emploi pour jouer.
  * --------------------------------------------------------------------------------
  * @param dimensions -> int *, un tableau d'entiers contenant les dimensions de la grille
  * @param diagonale -> Boolean, un booléen qui nous dit si le joueur veut des mots en diagonale
+ * @param dico -> Dictionnaire* un pointeur vers notre dictionnaire
  * @return -> char**, un tableau de caractères à deux dimensions.
  */
-grille_mots generation_grille(int* dimensions, Boolean diagonale);
+grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico);
 
 /**
  * Cette fonction permet d'essayer de placer un mot dans la grille.
@@ -65,11 +75,29 @@ void complete_grille(char** grille, int* dimensions);
 void affichage_grille(char** grille, int* dimensions);
 
 /**
- * Cette fonction permet de tirer au hasard un mot de la longueur désirée.
- * -----------------------------------------------------------------------
- * @param longueur -> int, la longueur du mot souhaité
- * @return -> char*, le mot souhaité
+ * Cette fonction permet de générer le dictionnaire qui contient tous les mots possibles
+ * à partir du fichier dictionnaire.txt.
+ * ----------------------------------------------------------------------------------------
+ * @return -> Dictionnaire*
  */
-char* tirer_mot(int longueur);
+Dictionnaire* charger_dictionnaire();
+
+/**
+ * Cette fonction permet de scanner le dictionnaire passé en paramètre
+ * et de retourner un mot au hasard de la longueur souhaitée.
+ * ---------------------------------------------------------------------
+ * @param dico -> Dictionnaire*, un pointeur vers notre dicitonnaire
+ * @param longueur -> int, la longueur du mot souhaité
+ * @return -> char*, un mot de la longueur souhaitée.
+ */
+char* tirer_mot_du_dico(Dictionnaire* dico, int longueur);
+
+/**
+ * Cette procédure permet de libérer l'espace mémoire associé au dictionnaire.
+ * ---------------------------------------------------------------------------
+ * @param dico -> Dictionnaire*, un pointeur vers notre dictionnaire.
+ * @return -> void
+ */
+void liberer_dico(Dictionnaire* dico);
 
 #endif //U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_GRID_H

@@ -3,11 +3,10 @@
 //
 #include "grid.h"
 
-grille_mots generation_grille(int* dimensions, Boolean diagonale) {
+grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico) {
     //Nettoyage de l'affichage et message d'attente
     printf("\033[2J\033[H");
     printf("Generation de la grille...\nPatientez...\n");
-
     //Initialisation de la structure (grille, mots cachés dans la grille et nombre de mots)
     grille_mots ma_grille_mot;
     //Ainsi que des variables utilisées pour ma_grille_mot
@@ -32,23 +31,26 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale) {
     Boolean succes = true;
     //Tant que nos mots font au moins 3 lettres, on essaye de les placer comme on peut
     while (nombre_de_lettres > 2) {
-      mot = tirer_mot(nombre_de_lettres);
-      succes = placer_mot(grille, dimensions, mot, &diagonale);
-        if (succes == true) {
-            index_mots++;
-            char** tmp = realloc(liste_mots, sizeof(char*) * index_mots);
-            if (tmp == NULL) {
-                printf("Erreur lors de la réallocation.\n");
+        mot = tirer_mot_du_dico(dico, nombre_de_lettres);
+        if (mot != NULL) {
+            succes = placer_mot(grille, dimensions, mot, &diagonale);
+            if (succes == true) {
+                index_mots++;
+                printf("%d\n", index_mots);
+                char** tmp = realloc(liste_mots, sizeof(char*) * index_mots);
+                if (tmp == NULL) {
+                    printf("Erreur lors de la réallocation.\n");
+                }
+                else {
+                    liste_mots = tmp;
+                    liste_mots[index_mots - 1] = mot;
+                }
             }
             else {
-                liste_mots = tmp;
-                liste_mots[index_mots - 1] = mot;
+                nombre_de_lettres--;
             }
         }
-        else {
-          nombre_de_lettres--;
-      }
-    }
+        }
     //On complète les trous restants de la grille (les @) avec des lettres random
     complete_grille(grille, dimensions);
 
@@ -211,64 +213,57 @@ void affichage_grille(char** grille, int* dimensions) {
     printf("\n");
 }
 
+Dictionnaire* charger_dictionnaire() {
+    printf("Chargement de tous les mots...\n");
+    FILE* fichier = fopen("dictionnaire.txt", "r");
+    if (fichier == NULL) {
+        printf("Attention ! Impossible d'ouvrir le fichier !\n");
+        return NULL;
+    }
+    //On initialise notre gros dictionnaire qui contiendra tous nos mots.
+    Dictionnaire* dico = (Dictionnaire*) malloc(sizeof(Dictionnaire));
+    dico->max_length = 16;
+    dico->listes = (ListeMots*) malloc(dico->max_length * sizeof(ListeMots));
+    char buffer[256];
+    int longueur;
+    while (fgets(buffer, sizeof(buffer), fichier) != NULL) {
+        // En fait dès que l'on voit un \n on s'arrête et on garde la première partie de la chaîne
+        buffer[strcspn(buffer, "\n")] = '\0';
+        longueur = strlen(buffer);
+        if (longueur > 0 && longueur < dico->max_length) {
+            // Réallouer l'espace pour le mot
+            ListeMots* liste = &dico->listes[longueur];
+            char** tmp = realloc(liste->mots, (liste->count + 1) * sizeof(char*));
+            if (tmp != NULL) {
+                liste->mots = tmp;
+                liste->mots[liste->count] = malloc(longueur + 1);
+                strcpy(liste->mots[liste->count], buffer);
+                liste->count++;
+            }
+        }
+    }
+    fclose(fichier);
+    return dico;
+}
 
-char* tirer_mot(int longueur) {
-    //On fait plusieurs listes de mots selon leur longueur
-    static char* mots_3[] = {"ARA", "RAT", "TRI", "SUR", "BOB", "MOT", "RUE"};
-    static char* mots_4[] = {"BANC", "TROP", "TARD", "PERD", "BOIS", "CHAT", "PAPA", "ETRE", "SANS", "SANG", "AGIR", "GARE", "COUP"};
-    static char* mots_5[] = {"CLAIR", "RATON", "ARBRE", "IDIOT", "MAMAN", "ALICE", "HETER", "CHENE"};
-    static char* mots_6[] = {"RENARD", "OBSCUR", "BADANT", "PRETRE", "PRETER", "RUELLE", "COUPER", "VENDRE"};
-    static char* mots_7[] = {"REPTILE", "ABRICOT", "GRATUIT", "ACHETER"};
-    static char* mots_8[] = {"ABDIQUAT"};
-    static char* mots_9[] = {"ABOIERONS", "CARREMENT", "ILLUSOIRE", "ATTENTION"};
-    static char* mots_10[] = {"ABOMINABLE", "ANACHORETE", "ABOUTIRIEZ", "VIEILLOTTE", "VIEILLIREZ"};
-    static char* mots_11[] = {"ABIMERAIENT", "SINUSOIDALE"};
-    static char* mots_12[] = {"INFORMATIQUE"};
-    static char* mots_13[] = {"ABRUTISSANTES"};
-    static char* mots_14[] = {"ACCOMPLIRAIENT", "HYPOCONDRIAQUE"};
-    static char* mots_15[] = {"AFFRANCHISSABLE"};
-    static char* mots_16[] = {"ABASOURDISSAIENT"};
-    //Ensuite en fonction de la longueur du mot souhaité, on renvoie un mot au hasard dans la liste des mots de la longueur correspondante.
-    if (longueur == 3) {
-        return mots_3[rand() % (sizeof(mots_3) / sizeof(mots_3[0]))];
+char* tirer_mot_du_dico(Dictionnaire* dico, int longueur) {
+    if (longueur <= 0 || longueur >= dico->max_length) {
+        return NULL;
     }
-    if (longueur == 4) {
-        return mots_4[rand() % (sizeof(mots_4) / sizeof(mots_4[0]))];
+    ListeMots* liste = &dico->listes[longueur];
+    if (liste->count == 0) {
+        return NULL;
     }
-    if (longueur == 5) {
-        return mots_5[rand() % (sizeof(mots_5) / sizeof(mots_5[0]))];
+    return liste->mots[rand() % liste->count];
+}
+
+void liberer_dico(Dictionnaire* dico) {
+    for (int i = 0; i < dico->max_length; i++) {
+        for (int j = 0; j < dico->listes[i].count; j++) {
+            free(dico->listes[i].mots[j]);
+        }
+        free(dico->listes[i].mots);
     }
-    if (longueur == 6) {
-        return mots_6[rand() % (sizeof(mots_6) / sizeof(mots_6[0]))];
-    }
-    if (longueur == 7) {
-        return mots_7[rand() % (sizeof(mots_7) / sizeof(mots_7[0]))];
-    }
-    if (longueur == 8) {
-        return mots_8[rand() % (sizeof(mots_8) / sizeof(mots_8[0]))];
-    }
-    if (longueur == 9) {
-        return mots_9[rand() % (sizeof(mots_9) / sizeof(mots_9[0]))];
-    }
-    if (longueur == 10) {
-        return mots_10[rand() % (sizeof(mots_10) / sizeof(mots_10[0]))];
-    }
-    if (longueur == 11) {
-        return mots_11[rand() % (sizeof(mots_11) / sizeof(mots_11[0]))];
-    }
-    if (longueur == 12) {
-        return mots_12[rand() % (sizeof(mots_12) / sizeof(mots_12[0]))];
-    }
-    if (longueur == 13) {
-        return mots_13[rand() % (sizeof(mots_13) / sizeof(mots_13[0]))];
-    }
-    if (longueur == 14) {
-        return mots_14[rand() % (sizeof(mots_14) / sizeof(mots_14[0]))];
-    }
-    if (longueur == 15) {
-        return mots_15[rand() % (sizeof(mots_15) / sizeof(mots_15[0]))];
-    }
-    else {
-        return mots_16[rand() % (sizeof(mots_16) / sizeof(mots_16[0]))];
-    }
+    free(dico->listes);
+    free(dico);
 }

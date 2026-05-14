@@ -8,7 +8,7 @@ void controle_d_acquisition() {
     //Initialisation des variables nécessaires
     char choix[10];
     int result = 0;
-
+    Joueur* les_joueurs[100];
     //Boucle do pour demander à l'utilisateur
     do {
         printf("Que voulez-vous faire ? (entrez comme réponse l'entier correspondant)\n  - Demarrer une partie (0)\n  - Afficher les meilleurs scores (1)\n  - Quitter (2)\n");
@@ -17,7 +17,6 @@ void controle_d_acquisition() {
             printf("Attention ! Votre reponse est incorrecte !\nDonnez un entier situe entre 0 et 2 indiquant votre reponse.\n");
         }
     } while (choix[0] != '0' && choix[0] != '1' && choix[0] != '2');
-
     //Transformation de la réponse de l'utilisateur en int et démarrage de la partie ou affichage des scores selon son choix
     int check = sscanf(&choix[0], "%d", &result);
     if (check == 1) {
@@ -26,7 +25,7 @@ void controle_d_acquisition() {
         }
         else {
             if (result == 1) {
-                scores();
+                scores(*les_joueurs);
             }
             else {
                 printf("Merci d'avoir joue.\nAu revoir !\n");
@@ -41,7 +40,7 @@ void controle_d_acquisition() {
 void jeu() {
     //Effacement de la sortie
     printf("\033[2J\033[H");
-
+    Dictionnaire* dico = charger_dictionnaire();
     //Variables pour les paramètres
     int dimensions[2] = {8, 8};
     Boolean diagonale = false;
@@ -55,7 +54,7 @@ void jeu() {
     parametres(dimensions, &diagonale, &temps);
 
     //Génération de la grille
-    grille_mots da_grille = generation_grille(dimensions, diagonale);
+    grille_mots da_grille = generation_grille(dimensions, diagonale, dico);
     affichage_grille(da_grille.grille, dimensions);
     printf("Nombre de mots : %d\n", da_grille.nb_mots);
 
@@ -130,12 +129,12 @@ void jeu() {
     fgets(nom_utilisateur, sizeof(nom_utilisateur), stdin);
     save_score(nom_utilisateur, score);
     printf("Merci %s ! Votre nom a ete stocke au milieu de celui des vainqueurs !\n", nom_utilisateur);
-
+    liberer_dico(dico);
     //Menu principal
     controle_d_acquisition();
 }
 
-void scores() {
+void scores(Joueur* les_joueurs) {
     printf("\033[2J\033[H");
     printf("Bienvenue ! Ici vous pouvez admirer les noms des meilleurs joueurs !\n");
     FILE *file;
