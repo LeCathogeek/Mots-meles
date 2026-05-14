@@ -12,10 +12,10 @@
  * @param dimensions -> int *, un tableau d'entiers contenant les dimensions de la grille
  * @param diagonale -> Boolean, un booléen qui nous dit si le joueur veut des mots en diagonale
  * @param dico -> Dictionnaire* un pointeur vers notre dictionnaire
- * @param liste_mots_pos -> Mot*, une liste de Mot contenant les mots de la grille et leurs positions
+ * @param liste_mots_pos -> Mot**, un pointeur vers une liste de Mot contenant les mots de la grille et leurs positions
  * @return -> char**, un tableau de caractères à deux dimensions.
  */
-grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico, Mot* liste_mots_pos);
+grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico, Mot** liste_mots_pos);
 
 /**
  * Cette fonction permet d'essayer de placer un mot dans la grille.
@@ -24,11 +24,11 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
  * @param dimensions -> int*, notre tableau donnant les dimensions de notre grille.
  * @param mot -> char*, le mot que l'on essaie de placer dans la grille
  * @param diagonale -> Boolean*, si on souhaite que des mots apparaissent en diagonale
- * @param liste_mots -> Mot*, un ensemble de mots qui contient les différents mots placés dans la grille et leur position
+ * @param liste_mots -> Mot**, un pointeur vers un ensemble de mots qui contient les différents mots placés dans la grille et leur position
  * @param index_mots -> int, le nombre de mots déjà placés dans la grille
  * @return -> Boolean, si la fonction a réussi à placer le mot.
  */
-Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale, Mot* liste_mots, int index_mots);
+Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale, Mot** liste_mots, int index_mots);
 
 /**
  * Cette fonction permet de générer un SensDirection indiquant
