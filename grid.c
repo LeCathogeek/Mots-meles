@@ -29,6 +29,8 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
     int nombre_de_lettres = dimensions[recherche_minimum(dimensions, 2)];
     char* mot;
     Boolean succes = true;
+    int echecs_consecutifs = 0;  // Compteur d'échecs consécutifs
+
     //Tant que nos mots font au moins 3 lettres, on essaye de les placer comme on peut
     while (nombre_de_lettres > 2) {
         mot = tirer_mot_du_dico(dico, nombre_de_lettres);
@@ -36,6 +38,7 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
             succes = placer_mot(grille, dimensions, mot, &diagonale);
             if (succes == true) {
                 index_mots++;
+                echecs_consecutifs = 0;  // Réinitialiser le compteur en cas de succès
                 char** tmp = realloc(liste_mots, sizeof(char*) * index_mots);
                 if (tmp == NULL) {
                     printf("Erreur lors de la réallocation.\n");
@@ -46,10 +49,22 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
                 }
             }
             else {
-                nombre_de_lettres--;
+                echecs_consecutifs++;
+                // Si 5 échecs consécutifs, passer à une longueur inférieure
+                if (echecs_consecutifs >= 5) {
+                    nombre_de_lettres--;
+                    echecs_consecutifs = 0;
+                }
             }
         }
+        else {
+            echecs_consecutifs++;
+            if (echecs_consecutifs >= 5) {
+                nombre_de_lettres--;
+                echecs_consecutifs = 0;
+            }
         }
+    }
     //On complète les trous restants de la grille (les @) avec des lettres random
     complete_grille(grille, dimensions);
 
