@@ -3,7 +3,7 @@
 //
 #include "grid.h"
 
-grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico) {
+grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* dico, Mot* liste_mots_pos) {
     //Nettoyage de l'affichage et message d'attente
     printf("\033[2J\033[H");
     printf("Generation de la grille...\nPatientez...\n");
@@ -35,7 +35,7 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
     while (nombre_de_lettres > 2) {
         mot = tirer_mot_du_dico(dico, nombre_de_lettres);
         if (mot != NULL) {
-            succes = placer_mot(grille, dimensions, mot, &diagonale);
+            succes = placer_mot(grille, dimensions, mot, &diagonale, liste_mots_pos, index_mots);
             if (succes == true) {
                 index_mots++;
                 echecs_consecutifs = 0;  // Réinitialiser le compteur en cas de succès
@@ -75,7 +75,7 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
     return ma_grille_mot;
 }
 
-Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale) {
+Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale, Mot* liste_mots, int index_mots) {
     //Initialisation des variables de base
 
     //Le déplacement
@@ -140,6 +140,13 @@ Boolean placer_mot(char** grille, int* dimensions, char* mot, Boolean* diagonale
                 x += dx;
                 y += dy;
             }
+            liste_mots = realloc(liste_mots, sizeof(mot) * (index_mots + 1));
+            liste_mots[index_mots].mot = mot;
+            liste_mots[index_mots].longueur = longueur;
+            liste_mots[index_mots].start_x = start_x;
+            liste_mots[index_mots].start_y = start_y;
+            liste_mots[index_mots].end_x = x;
+            liste_mots[index_mots].end_y = y;
             //Et on retourne true
             return true;
         }

@@ -45,7 +45,7 @@ void jeu() {
     int dimensions[2] = {8, 8};
     Boolean diagonale = false;
     int temps;
-
+    Mot* liste_mots_pos = (Mot*) malloc(sizeof(Mot) * 1);
     //Variables pour la fin de la partie
     float score = 0;
     char* nom_utilisateur;
@@ -54,7 +54,7 @@ void jeu() {
     parametres(dimensions, &diagonale, &temps);
 
     //Génération de la grille
-    grille_mots da_grille = generation_grille(dimensions, diagonale, dico);
+    grille_mots da_grille = generation_grille(dimensions, diagonale, dico, liste_mots_pos);
     affichage_grille(da_grille.grille, dimensions);
     printf("Nombre de mots : %d\n", da_grille.nb_mots);
 
@@ -116,7 +116,7 @@ void jeu() {
     }
     free(da_grille.grille);
     free(da_grille.mots);
-
+    free(liste_mots_pos);
     //Calcul du score
     for (int i = 0; i < nb_mots_trouves ;i++) {
         score += pow(strlen(mots_trouves_user[i]), 4.0/3.0);

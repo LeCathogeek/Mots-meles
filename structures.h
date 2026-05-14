@@ -37,4 +37,13 @@ typedef struct {
     float score;
 } Joueur;
 
+typedef struct {
+    int longueur;
+    char* mot;
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
+} Mot;
+
 #endif //U_P26_ETIENNE_PACAULT_JEU_DE_LETTRES_STRUCTURES_H
