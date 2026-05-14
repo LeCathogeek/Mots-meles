@@ -99,6 +99,41 @@ void jeu() {
         }
         if (mot_trouve) {
             printf("Felicitations ! Vous avez trouve le mot %s.\n", mot_devine);
+            int balayage = 0;
+            while (balayage < da_grille.nb_mots) {
+                if (strcmp(mot_devine, liste_mots_pos[balayage].mot) == 0) {
+                    int start_x = liste_mots_pos[balayage].start_x;
+                    int start_y = liste_mots_pos[balayage].start_y;
+                    int end_x = liste_mots_pos[balayage].end_x;
+                    int end_y = liste_mots_pos[balayage].end_y;
+                    int x = start_x;
+                    int y = start_y;
+                    int dx = 0;
+                    int dy = 0;
+                    if (start_x > end_x) {
+                        dx = -1;
+                    }
+                    else {
+                        if (start_x < end_x) {
+                            dx = 1;
+                        }
+                    }
+                    if (start_y > end_x) {
+                        dy = -1;
+                    }
+                    else {
+                        if (start_y < end_y) {
+                            dy = 1;
+                        }
+                    }
+                    for (int i = 0; i < strlen(mot_devine); i++) {
+                        da_grille.grille[x][y] = '-';
+                        x += dx;
+                        y += dy;
+                    }
+                }
+                balayage++;
+            }
         }
         else {
             printf("Mot incorrect ou déjà trouve !\n");
