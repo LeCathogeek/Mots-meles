@@ -100,7 +100,8 @@ void jeu() {
         if (mot_trouve) {
             printf("Felicitations ! Vous avez trouve le mot %s.\n", mot_devine);
             int balayage = 0;
-            while (balayage < da_grille.nb_mots) {
+            int trouve = 0;
+            while (balayage < da_grille.nb_mots && trouve == 0) {
                 if (strcmp(mot_devine, liste_mots_pos[balayage].mot) == 0) {
                     int start_x = liste_mots_pos[balayage].start_x;
                     int start_y = liste_mots_pos[balayage].start_y;
@@ -118,7 +119,7 @@ void jeu() {
                             dx = 1;
                         }
                     }
-                    if (start_y > end_x) {
+                    if (start_y > end_y) {
                         dy = -1;
                     }
                     else {
@@ -131,6 +132,7 @@ void jeu() {
                         x += dx;
                         y += dy;
                     }
+                    trouve = 1;
                 }
                 balayage++;
             }
