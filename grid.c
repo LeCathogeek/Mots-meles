@@ -36,7 +36,6 @@ grille_mots generation_grille(int* dimensions, Boolean diagonale, Dictionnaire* 
             succes = placer_mot(grille, dimensions, mot, &diagonale);
             if (succes == true) {
                 index_mots++;
-                printf("%d\n", index_mots);
                 char** tmp = realloc(liste_mots, sizeof(char*) * index_mots);
                 if (tmp == NULL) {
                     printf("Erreur lors de la réallocation.\n");

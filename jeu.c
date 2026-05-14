@@ -69,9 +69,8 @@ void jeu() {
     char** mots_trouves_user = (char**) malloc(sizeof(char*) * da_grille.nb_mots);
 
     //Boucle de jeu
-    while ((int)(maintenant - debut) < temps || nb_mots_trouves < da_grille.nb_mots) {
+    while ((int)(maintenant - debut) < temps && nb_mots_trouves < da_grille.nb_mots) {
         maintenant = time(0);
-
         //Lecture de l'entrée utilisateur
         printf("C'est parti ! Entrez un mot : \n");
         fgets(mot_devine, sizeof(mot_devine), stdin);
@@ -104,6 +103,7 @@ void jeu() {
         else {
             printf("Mot incorrect ou déjà trouve !\n");
         }
+        affichage_grille(da_grille.grille, dimensions);
     }
     printf("La partie est terminée !\n");
     if (nb_mots_trouves == da_grille.nb_mots) {
